@@ -3,7 +3,7 @@ store = "nutricost-shop.myshopify.com"
 
 [environments.dev]
 store = "nutricost.myshopify.com"
-theme = "156821815526"
+theme = "159461867750"
 
 [environments.production]
 store = "nutricost-shop.myshopify.com"
