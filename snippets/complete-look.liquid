@@ -1,0 +1,18 @@
+{%- if product.metafields.custom.complete_look.value != blank -%}
+<div class="completeLook">
+    <h4 class="ttl tc">{{settings.ctl-ttl}}</h4>
+    <div class="fl f-jcc f-wrap grid-products">
+        {% for product in product.metafields.custom.complete_look.value %}
+        <div class="ctlItem tc">
+                <a class="grid-view-item__link mb10" href="{{ product.url | within: collection }}">
+                  <div class="grid-view-item__image lazyload" data-bgset="{% render 'prgrid-img', image: product.featured_image, sizes: sizes %}" data-sizes="auto" data-parent-fit="contain"></div>
+                </a>
+                {% if vendorName %}<div class="grid-view-item__vendor">{{ product.vendor }}</div>{% endif %}
+                <a href="{{ product.url | within: collection }}" class="grid-view-item__title">{{ product.title }}</a>
+                {% unless settings.catalogmode %}<div class="grid-view-item__meta">{% render 'product-price', product: product %}</div>{% endunless %}
+                {% if prReview %}{% render 'ratings', product: product %}{% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{%- endif -%}

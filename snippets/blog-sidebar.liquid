@@ -1,0 +1,96 @@
+{% for block in section.blocks %}
+	{% if block.type == 'menu' %}
+        <div class="sidebar_widget categories">
+          <div class="widget-title">{{block.settings.title}}</div>
+          <div class="widget-content">
+            <ul class="sidebar_cate">{% for link in linklists[block.settings.side_categories].links %}{% include 'mm-links' %}{% endfor %}</ul>
+          </div>
+        </div>
+    {% elsif block.type == 'search' %}
+        <div class="sidebar_widget categories">
+          <div class="widget-title">{{block.settings.title}}</div>
+          <div class="widget-content">
+            <form action="{{ routes.search_url }}" method="get" class="blogSearch input-group" role="search">
+                  <input type="hidden" name="type" value="article" />
+                <input class="input-group__field sinput" type="search" name="q" value="{{ search.terms | escape }}" autocomplete="off" />
+                <input type="hidden" name="options[prefix]" value="last" aria-hidden="true" />
+                <span class="input-group__btn">
+                  <button class="btn search__submit" type="submit"><i class="ad ad-search-l"></i> <span class="icon__fallback-text">{{ 'general.search.submit' | t }}</span></button>
+                </span>
+            </form>
+          </div>
+        </div>
+	{% elsif block.type == 'rposts' %}
+		<div class="sidebar_widget categories">
+          <div class="widget-title">{{block.settings.title}}</div>
+          <div class="widget-content">
+            {% for article in blogs[blog.handle].articles limit:5 %}
+              <div class="list-columns recentPost flex">
+                <div class="grid-view_image"><a href="{{ article.url }}" class="article-img">{{ article | img_url: '100x100', crop:'center' | img_tag: article.title }}</a></div>
+                <div class="details"><a href="{{ article.url }}" class="article-name">{{ article.title }}</a> <span class="article__date">{{ article.published_at | time_tag: format: 'month_day_year' }}</span></div>
+              </div>
+              {% endfor %}
+          </div>
+        </div>
+	{% elsif block.type == 'tags' %}
+		<div class="sidebar_widget categories">
+          <div class="widget-title">{{block.settings.title}}</div>
+          <div class="widget-content">
+            <ul class="blogTags fl f-wrap">
+              {% for tag in blog.all_tags %}
+                <li {% if current_tags contains tag %}class="active"{% endif %}>{{ tag | link_to_tag: tag }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+	{% elsif block.type == 'products' %}
+      <div class="sidebar_widget small--hide medium--hide">
+        <div class="widget-title {% if section.settings.enable_clps_blocks %} collapsible{% endif %}">{{block.settings.title}}</div>
+        <div class="widget-content">
+          {% if block.settings.sidebar_products != blank %}
+          <div class="side-pr-{{block.settings.side_prod_opt}}" {% if block.settings.side_prod_opt == "slider" %}id="sideProdSlider" data-slick='{"slidesToShow":1,"slidesToScroll":1, "autoplay":true,"autoplaySpeed":6000,{%- if settings.rtl -%}"rtl": true,{%- endif -%} "infinite": true }'{% endif %}>
+              {% for product in collections[block.settings.sidebar_products].products limit:block.settings.num_of_products %}
+              {% if block.settings.side_prod_opt == "slider" %}
+                <div class="item">{% include 'product-card-grid' %}</div>
+              {% else %}
+                {% include 'product-card-grid-columns' %}
+              {% endif %}
+              {% endfor %}
+            {% if block.settings.side_all_products %}
+            <div class="text-center"><a href="{{block.settings.sidebar_products}}" class="btn">{{ block.settings.btn_txt}}</a></div>
+            {% endif %} 
+          </div>
+          <script>window.addEventListener('DOMContentLoaded',function(){$("#sideProdSlider").slick()});</script>
+          {% else %}
+          <p>Please select collection from store admin > customize > Collection page > sidebar</p>
+          {% endif %} 
+        </div>
+      </div>
+	{% elsif block.type == 'image_bnr' %}
+      <div class="sidebar_widget static-banner small--hide medium--hide">
+        {% if block.settings.side_bnr_link != blank %}
+        <a href="{{ block.settings.side_bnr_link }}">
+          {% endif %}
+          {% if block.settings.side_bnr_img != blank %}
+          {{ block.settings.side_bnr_img | img_url: '300x' | img_tag }}
+          {% else %}
+          {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+          {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+          {% endif %}
+          {% if block.settings.side_bnr_link != blank %}
+        </a>
+        {% endif %}
+      </div>
+	{% elsif block.type == 'static_text' %}
+      <div class="sidebar_widget small--hide medium--hide">
+        <div class="widget-title">{{block.settings.title}}</div>
+        <div class="widget-content">
+          {% if block.settings.text != blank %}
+          {{ block.settings.text }}
+          {% else %}
+          <p>Please select collection from store admin > customize > Collection page > sidebar</p>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+{% endfor %}

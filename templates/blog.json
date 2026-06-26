@@ -1,0 +1,104 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "blog": {
+      "type": "blog-template",
+      "blocks": {
+        "fd1544b2-74df-49b8-8da9-1c65b3e75fba": {
+          "type": "menu",
+          "settings": {
+            "title": "Categories",
+            "side_categories": ""
+          }
+        },
+        "8578e11f-1899-4179-9bd4-cabdd7a54de1": {
+          "type": "rposts",
+          "settings": {
+            "title": "Recent Posts",
+            "count": 5
+          }
+        },
+        "b441111e-5c1a-43af-b346-08ab99f9dc35": {
+          "type": "products",
+          "settings": {
+            "title": "Popular Products",
+            "sidebar_products": "best-sellers",
+            "num_of_products": "3",
+            "side_all_products": false,
+            "btn_txt": "View All",
+            "side_prod_opt": "slider"
+          }
+        },
+        "45aedb7e-5eec-49fb-aab8-1e90bcc8c3d8": {
+          "type": "image_bnr",
+          "disabled": true,
+          "settings": {
+            "side_bnr_link": ""
+          }
+        },
+        "e4010531-24a7-4c86-b86e-b0052f6351f4": {
+          "type": "search",
+          "disabled": true,
+          "settings": {
+            "title": "Search"
+          }
+        },
+        "88f2d901-3656-4ffb-8c5f-a9b52b7e9e75": {
+          "type": "tags",
+          "disabled": true,
+          "settings": {
+            "title": "Tags"
+          }
+        }
+      },
+      "block_order": [
+        "fd1544b2-74df-49b8-8da9-1c65b3e75fba",
+        "8578e11f-1899-4179-9bd4-cabdd7a54de1",
+        "b441111e-5c1a-43af-b346-08ab99f9dc35",
+        "45aedb7e-5eec-49fb-aab8-1e90bcc8c3d8",
+        "e4010531-24a7-4c86-b86e-b0052f6351f4",
+        "88f2d901-3656-4ffb-8c5f-a9b52b7e9e75"
+      ],
+      "settings": {
+        "bnr": false,
+        "show_collection_name": true,
+        "bheight": 300,
+        "bheightipad": 200,
+        "bheightmob": 100,
+        "bnr-wd": 600,
+        "ftTtl": 42,
+        "ttlft": "font2",
+        "ttlwt": "fw-700",
+        "ttlcase": "tt-u",
+        "ftTxt": 15,
+        "ttlclr": "#000000",
+        "clr_bg": "#f5f5f5",
+        "pageTtl": false,
+        "layout": "list",
+        "img_ratio": "100",
+        "sidebar_position": "left",
+        "blog_align": "text-left",
+        "grid": 3,
+        "tablet-grid": 2,
+        "mobile-grid": 1,
+        "blog_show_author": true,
+        "blog_show_date": true,
+        "show_comment": true,
+        "show_mini_des": true,
+        "show_tags": true,
+        "number_of_post_to_show": "4"
+      }
+    }
+  },
+  "order": [
+    "blog"
+  ]
+}

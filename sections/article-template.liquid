@@ -1,0 +1,509 @@
+{%- if settings.breadcrumb_blog -%}{%- include 'breadcrumb' -%}{%- else -%}<div class="topSpace"></div>{%- endif -%}
+
+{%- liquid
+	assign new_comment = false
+	if comment and comment.created_at
+  		assign new_comment = true
+  		assign new_comment_id = comment.id
+	endif
+
+	if new_comment
+  		assign duplicate_comment = false
+  		for comment in article.comments
+    		if comment.id == new_comment_id
+      			assign duplicate_comment = true
+      			break
+    		endif
+  		endfor
+  		if duplicate_comment
+    		assign number_of_comments = article.comments_count
+  		else
+    		assign number_of_comments = article.comments_count | plus: 1
+  		endif
+	else
+  		assign number_of_comments = article.comments_count
+	endif
+-%}
+<style>
+  .sidebar { {% if section.settings.sidebar_position == "left" %}order:-1; padding-right:30px;{% elsif section.settings.sidebar_position == "right" %}padding-left:30px;{% endif %} }
+</style>
+<article class="page-width">
+  <div class="fl f-col f-row-md">
+    <div class="fl1 w_100 {{ section.settings.text_align}}">
+      <div class="blog--list-view">   
+        <div class="section-header">
+          <h1 class="h2">{{ article.title }}</h1>
+          <ul class="publish-detail">
+
+            {% if section.settings.blog_show_date %}
+            <li>
+              {% capture date %}<time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: format: 'month_day_year' }}</time>{% endcapture %}
+              <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: format: 'month_day_year' }}</time>
+            </li>
+            {% endif %}
+
+            <!-- {% if section.settings.blog_show_author %}<li class="article__author">{{ 'blogs.article.by_author' | t: author: article.author }}</li>{% endif %} -->
+
+            {% if blog.comments_enabled? %}
+                <li><i class="ad ad-comments-l" aria-hidden="true"></i> <a href="{{ article.url }}#comments"> {{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}</a></li>
+            {% endif %}
+          </ul>
+        </div>
+        {% if article.image and section.settings.featured-img %}<div class="article_featured-image">{{ article | img_url: 'master' | img_tag: article.title }}</div>{% endif %}
+        <div class="rte">{{ article.content }}</div>
+
+        {% if article.tags.size > 0 %}                              
+        <ul class="publish-detail" aria-label="{{ 'blogs.article.tags' | t }}">
+          <span> {{ 'blogs.article.posted_in' | t }}  </span>                                  
+          {% for tag in article.tags %}<a href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a>{% unless forloop.last %}, {% endunless %}{% endfor %}
+        </ul>                                
+        {% endif %}
+
+        {% if section.settings.show_share_buttons %}
+        {% include 'social-sharing', share_title: article.title, share_permalink: article.url, share_image: article.image %}
+        {% endif %} 
+
+        <!-- Blog navigation --> 
+        {% if blog.next_article or blog.previous_article %}
+        <div class="flex blog-nav">
+            {% if blog.previous_article %}<a class="btn--link" href="{{blog.previous_article}}"><i class="ad ad-chevron-cil-{% if settings.rtl %}right{% else %}left{% endif %}" aria-hidden="true"></i> {{ 'general.pagination.previous' | t }}</a>{% endif %}
+            {% if blog.next_article %}<a class="btn--link" href="{{blog.next_article}}">{{ 'general.pagination.next' | t }} <i class="ad ad-chevron-cil-{% if settings.rtl %}left{% else %}right{% endif %}" aria-hidden="true"></i></a>{% endif %}
+        </div>
+        {% endif %}
+        {% if section.settings.show_rlpr and article.metafields.custom.related_products != blank %}
+            {% case section.settings.grid %}
+              {% when 3 %}{%- assign grid_ds = 'large-up--one-third' -%}
+              {% when 4 %}{%- assign grid_ds = 'large-up--one-quarter' -%}
+              {% when 5 %}{%- assign grid_ds = 'large--one-quarter widescreen--one-fifth' -%}
+              {% when 6 %}{%- assign grid_ds = 'large--one-fifth widescreen--one-sixth' -%}
+              {% when 7 %}{%- assign grid_ds = 'large--one-fifth widescreen--one-seventh' -%}
+            {% endcase %}
+            {% case section.settings.tablet-grid %}
+              {% when 2 %}{%- assign grid_tb = 'medium--one-half' -%}
+              {% when 3 %}{%- assign grid_tb = 'medium--one-third' -%}
+              {% when 4 %}{%- assign grid_tb = 'medium--one-quarter' -%}
+              {% when 5 %}{%- assign grid_tb = 'medium--one-fifth' -%}
+            {% endcase %}
+            {% case section.settings.mobile-grid %}
+              {% when 1 %}{%- assign grid_mb = 'small--one-whole' -%}
+              {% when 2 %}{%- assign grid_mb = 'small--one-half' -%}
+              {% when 3 %}{%- assign grid_mb = 'small--one-third' -%}
+            {% endcase %}
+            <div class="related-product" id="artcileProducts" data-section-id="artcileProducts" data-section-type="carousel">
+              {% unless section.settings.related_title == blank %}
+                <div class="sec-ttl {{ settings.title_align}}">
+                    <h3 class="h3">{{ section.settings.related_title | escape }}</h3>
+                    {%- if section.settings.related_sub_title != blank -%}<span>{{section.settings.related_sub_title}}</span>{%- endif -%}        
+                </div> 
+              {% endunless %}
+              <div id="productSlider-artcileProducts" class="grid grid-products carousel" data-slick='{"slidesToShow": {{ section.settings.grid }},"slidesToScroll": 1, {%- if settings.rtl -%}"rtl": true,{%- endif -%} "infinite": true, "autoplay":{{section.settings.rpauto}}, "autoplaySpeed": {{section.settings.auto_speed | times: 1000}}, "responsive":[{"breakpoint": 1024,"settings":{"slidesToShow": {{ section.settings.tablet-grid }} }},{"breakpoint": 767,"settings":{"slidesToShow":{{ section.settings.mobile-grid }} }} ]}'>
+                  {% for product in article.metafields.custom.related_products.value %}
+                    <div class="grid__item {{ grid_mb }} {{ grid_tb }} {{grid_ds}}">{% include 'product-card-grid', sizes: image_size %}</div>
+                  {% endfor %}
+              </div><br><br>
+            </div>  
+        {% endif %}
+          
+        <!-- Article comments --> 
+        {%- assign number_of_comments = article.comments_count -%}
+
+        {% if comment and comment.created_at %}
+          {%- assign number_of_comments = article.comments_count | plus: 1 -%}
+        {% endif %} 
+        {% if blog.comments_enabled? %}
+        {% if number_of_comments > 0 %}
+        <h2 class="com-title">{{ 'blogs.comments.comments_with_count' | t: count: number_of_comments }}</h2>
+        {% paginate article.comments by 5 %}
+
+        {% comment %} #comments is required, it is used as an anchor link by Shopify. {% endcomment %}
+        <div id="comments" class="text-left">
+          {% if comment and comment.created_at %}
+            <p class="note form--success">{% if blog.moderated? %}{{ 'blogs.comments.success_moderated' | t }}{% else %}{{ 'blogs.comments.success' | t }}{% endif %}</p>
+          {% endif %}
+          <ul class="comments">
+            {% comment %}If a comment was just submitted with no blank field, show it.{% endcomment %}
+            {% if comment and comment.created_at %}<li id="{{ comment.id }}" class="comment"> {% include 'comment' %} </li>{% endif %}
+            {% for comment in article.comments %}<li id="{{ comment.id }}" class="comment"> {% include 'comment' %} </li>{% endfor %}
+          </ul>
+          {% if paginate.pages > 1 %}{% include 'pagination' %}{% endif %}
+        </div>
+        {% endpaginate %}
+
+
+        {% endif %}
+        <div class="form-vertical">
+          {% form 'new_comment', article %}
+          <h2 class="h3">{{ 'blogs.comments.title' | t }}</h2>
+          {%- if form.errors -%}
+            <p class="form--error">{{ form.errors | default_errors }}</p>
+          {%- elsif form.posted_successfully? -%}
+            {% if blog.moderated? and comment.status == 'unapproved' %}
+            <p class="form--success">{{ 'blogs.comments.success_moderated' | t }}</p>
+            {% else %}
+              <p class="form--success">{{ 'blogs.comments.success' | t }}</p>
+            {% endif %}
+          {%- endif -%}
+          <div class="grid">
+            <div class="grid__item medium-up--one-half">
+              <label for="CommentAuthor">{{ 'blogs.comments.name' | t }}</label>
+              <input type="text" name="comment[author]" id="CommentAuthor" class="input-full{% if form.errors contains 'author' %} input--error{% endif %}" value="{{ form.author }}">
+            </div>
+            <div class="grid__item medium-up--one-half">
+              <label for="CommentEmail">{{ 'blogs.comments.email' | t }}</label>
+              <input type="email" name="comment[email]" id="CommentEmail" class="input-full{% if form.errors contains 'email' %} input--error{% endif %}" value="{{ form.email }}" autocorrect="off" autocapitalize="off">
+            </div>
+            <div class="grid__item">
+              <label for="CommentBody">{{ 'blogs.comments.message' | t }}</label>
+              <textarea name="comment[body]" id="CommentBody" class="input-full{% if form.errors contains 'body' %} input--error{% endif %}">{{ form.body }}</textarea>
+            </div>
+          </div>
+          {% if blog.moderated? %}<p class="fine-print">{{ 'blogs.comments.moderated' | t }}</p>{% endif %}
+          <input type="submit" class="btn" value="{{ 'blogs.comments.post' | t }}">
+          {% endform %}
+        </div>
+        {% endif %} 
+
+        <!-- article end -->
+
+        <div class="text-center return-link-wrapper">
+          <a href="{{ blog.url }}" class="btn btn--secondary btn--has-icon-before return-link"><i class="ad ad-caret-{% if settings.rtl %}right{% else %}left{% endif %}" aria-hidden="true"></i> {{ 'blogs.article.back_to_blog' | t: title: blog.title }}</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- sidebar --> 
+    {% unless section.settings.sidebar_position == 'nosidebar' %}
+	    <div class="blog-right sidebar">{% include 'blog-sidebar' %}</div>
+    {% endunless %}
+  </div>
+</article>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "articleBody": "{{ article.content | strip_html | escape }}",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ shop.url }}{{ page.url }}"
+  },
+  "headline": "{{ article.title }}",
+  {% if article.excerpt != blank %}
+    "description": "{{ article.excerpt | strip_html }}",
+  {% endif %}
+  {% if article.image %}
+    {% assign image_size = article.image.width | append: 'x' %}
+    "image": [
+      "https:{{ article | img_url: image_size }}"
+    ],
+  {% endif %}
+  "datePublished": "{{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' }}",
+  "dateCreated": "{{ article.created_at | date: '%Y-%m-%dT%H:%M:%SZ' }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ article.author }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    {% if settings.share_image %}
+      {% assign image_size = article | img_url: 'master' | append: 'x' %}
+      "logo": {
+        "@type": "ImageObject",
+        "height": "{{ settings.share_image.height }}",
+        "url": "https:{{ settings.share_image | img_url: image_size }}",
+        "width": "{{ settings.share_image.width }}"
+      },
+    {% endif %}
+    "name": "{{ shop.name }}"
+  }
+}
+</script>
+{% schema %}
+  {
+    "name": "Posts",
+    "settings": [
+ 	  {
+        "type": "select",
+        "id": "sidebar_position",
+        "label": "Sidebar Position",
+        "default": "left",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          },
+		  {
+            "value": "nosidebar",
+            "label": "No Sidebar"
+          }
+        ]
+      },
+	 {
+        "type": "select",
+        "id": "text_align",
+        "label": "Blog Content Align",
+        "default": "text-center",
+        "options": [
+          {
+            "value": "text-left",
+            "label": "Left"
+          },
+          {
+            "value": "text-center",
+            "label": "Center"
+          }		  
+        ]
+      },	 
+      {
+        "type": "checkbox",
+        "id": "featured-img",
+        "label": "Featured image",
+        "default": true
+      },	 
+      {
+        "type": "checkbox",
+        "id": "blog_show_author",
+        "label": "Show Author",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_date",
+        "label": "Show Date",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_share_buttons",
+        "label": "Show Social Sharing Buttons",
+        "default": true
+      },
+ 	  {
+        "type": "header",
+        "content": "Products by Metafield"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_rlpr",
+        "label": "Show Related Products",
+        "default": true,
+		"info": "[How to set metafield for this?](https://www.adornthemes.com/knowledge-base/show-specific-products-in-article-page/)"
+      },
+ 	  {
+        "id": "related_title",
+        "type": "text",
+        "label": "Section Title",
+        "default": "Related Products"
+      },
+ 	  {
+        "id": "related_sub_title",
+        "type": "text",
+        "label": "Section Sub title",
+        "default": "You can stop autoplay, increase/decrease aniamtion speed and number of grid to show and products from store admin."
+      },
+      {
+        "type": "paragraph",
+        "content": "Products Per Row"
+      },
+      {
+        "type": "range",
+        "id": "grid",
+        "label": "Desktop",
+        "default": 4,
+        "min": 2,
+        "max": 7,
+        "step": 1
+      },
+      {
+        "type": "range",
+        "id": "tablet-grid",
+        "label": "Tablet",
+        "default": 3,
+        "min": 2,
+        "max": 5,
+        "step": 1
+      },
+      {
+        "type": "range",
+        "id": "mobile-grid",
+        "label": "Mobile",
+        "default": 2,
+        "min": 1,
+        "max": 3,
+        "step": 1
+      },
+	  {
+        "type": "checkbox",
+        "id": "rpauto",
+        "label": "Carousel Autoplay",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "auto_speed",
+        "label": "Autoplay Speed",
+        "default": 5,
+        "min": 1,
+        "max": 30,
+        "step": 1
+      }
+    ],
+	"blocks": [
+      {
+        "type": "menu",
+        "name": "Navigation Menu",
+        "settings": [
+         	{ 
+              "type":"text",
+              "id":"title",
+              "label":"Title",
+			  "default": "Categories"
+          	},
+            {
+              "type": "link_list",
+              "id": "side_categories",
+              "label": "Select Categories",
+              "default": "main-menu"
+            }
+        ]
+      },
+      {
+        "type": "search",
+        "name": "Search",
+        "settings": [
+         	{ 
+              "type":"text",
+              "id":"title",
+              "label":"Title",
+			  "default": "Search in blog"
+          	}
+        ]
+      },
+	  {
+        "type": "rposts",
+        "name": "Recent Posts",
+		"limit": 1,
+        "settings": [
+         	{ 
+              "type":"text",
+              "id":"title",
+              "label":"Title",
+			  "default": "Recent Posts"
+          	},
+            {
+              "type": "range",
+              "id": "count",
+              "label": "Number of posts to show",
+              "default": 5,
+              "min": 1,
+              "max": 10,
+              "step": 1
+            }
+        ]
+     },
+	 {
+        "type": "tags",
+        "name": "Blog Tags",
+		"limit": 1,
+        "settings": [
+         	{ 
+              "type":"text",
+              "id":"title",
+              "label":"Title",
+			  "default":"Blog Tags"
+          	}
+        ]
+     },
+     {
+        "type": "products",
+        "name": "Products",
+		"limit": 1,
+        "settings": [
+         	{ 
+              "type":"text",
+              "id":"title",
+              "label":"Title Text",
+              "default":"Popular Products"
+          	},
+            {
+              "type": "collection",
+              "id": "sidebar_products",
+              "label": "Select Collection"
+            },
+            {
+              "type": "text",
+              "id": "num_of_products",
+              "label": "Number of products to show",
+              "default": "3"
+            },
+			{
+              "type": "checkbox",
+              "id": "side_all_products",
+              "label": "View all products button",
+              "default": false
+            },
+			{
+              "type": "text",
+              "id": "btn_txt",
+              "label": "Button Text",
+              "default": "View All"
+            },
+            {
+              "type": "select",
+              "id": "side_prod_opt",
+              "label": "Display Type",
+              "default": "slider",
+              "options": [
+                {
+                  "value": "slider",
+                  "label": "Slider"
+                },
+                {
+                  "value": "list",
+                  "label": "List"
+                }
+              ]
+            }
+        ]
+      },
+	  {
+        "type": "image_bnr",
+        "name": "Image Banner",
+        "settings": [
+            {
+              "type": "image_picker",
+              "id": "side_bnr_img",
+              "label": "Banner Image"
+            },
+            {
+              "type": "url",
+              "id": "side_bnr_link",
+              "label": "Banner"
+            }
+      	]
+      },
+	  {
+        "type": "static_text",
+        "name": "Static Text",
+        "settings": [
+            { 
+              "type":"text",
+              "id":"title",
+              "label":"Title Text",
+              "default":"Static Block Title"
+          	},
+            {
+              "type": "richtext",
+              "id": "text",
+              "label": "Text",
+              "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+            }
+      	]
+      }
+	]
+  }
+{% endschema %} 

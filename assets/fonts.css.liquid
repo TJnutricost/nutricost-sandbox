@@ -1,0 +1,15 @@
+{% liquid
+    assign font1 = settings.body_font
+    assign ft1 = font1.family
+    assign font2 = settings.header_font | default: font1 
+    assign ft2 = font2.family
+    assign font3 = settings.font3 | default:font1 
+    assign ft3 = font3.family
+%}
+{%- for variant in font1.variants -%}{% if variant.weight > "200" and variant.weight < "800" and variant.style != "italic" %}{{ variant | font_face: font_display: 'swap' }}{% endif %}{%- endfor -%}
+{%- if ft2 != ft1 -%}
+    {% for variant in font2.variants %}{% if variant.weight > "200" and variant.weight < "800" and variant.style != "italic" %}{{ variant | font_face: font_display: 'swap' }}{% endif %}{% endfor %}
+{%- endif -%}
+{%- if ft3 != ft1 -%}
+    {% for variant in font3.variants %}{% if variant.weight > "200" and variant.weight < "800" and variant.style != "italic" %}{{ variant | font_face: font_display: 'swap' }}{% endif %}{% endfor %}
+{%- endif -%}

@@ -1,0 +1,567 @@
+{% comment %}
+  Custom Split FAQ Section
+  2-Column Layout with Sticky Header option and fully customizable Typography.
+{% endcomment %}
+
+{%- style -%}
+  /* 1. LOAD CUSTOM FONTS */
+  {{ section.settings.heading_font | font_face: font_display: 'swap' }}
+  {{ section.settings.question_font | font_face: font_display: 'swap' }}
+  {{ section.settings.answer_font | font_face: font_display: 'swap' }}
+
+  /* 2. LAYOUT VARIABLES */
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    padding-left: {{ section.settings.margin_horizontal_mobile }}px;
+    padding-right: {{ section.settings.margin_horizontal_mobile }}px;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-left: {{ section.settings.margin_horizontal }}px;
+      padding-right: {{ section.settings.margin_horizontal }}px;
+    }
+  }
+
+  .faq-split-container-{{ section.id }} {
+    max-width: {{ section.settings.max_width }}px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: {{ section.settings.gap_mobile }}px;
+  }
+
+  /* Desktop Layout */
+  @media screen and (min-width: 750px) {
+    .faq-split-container-{{ section.id }} {
+      flex-direction: row;
+      align-items: flex-start; /* Important for sticky positioning */
+      gap: {{ section.settings.gap_desktop }}px;
+    }
+
+    .faq-col-header-{{ section.id }} {
+      width: {{ section.settings.header_col_width }}%;
+      {% if section.settings.sticky_header %}
+        position: sticky;
+        top: 40px; /* Offset from top of screen */
+      {% endif %}
+    }
+
+    .faq-col-content-{{ section.id }} {
+      width: calc(100% - {{ section.settings.header_col_width }}% - {{ section.settings.gap_desktop }}px);
+    }
+  }
+
+  /* 3. TYPOGRAPHY & STYLING */
+  
+  /* Section Header */
+  .faq-main-heading-{{ section.id }} {
+    font-family: {{ section.settings.heading_font.family }}, {{ section.settings.heading_font.fallback_families }} !important;
+    font-weight: {{ section.settings.heading_font.weight }} !important;
+    font-style: {{ section.settings.heading_font.style }} !important;
+    color: {{ section.settings.heading_color }};
+    font-size: {{ section.settings.heading_size_mobile }}px;
+    line-height: 1.2;
+    margin: 0 0 20px 0;
+    text-align: {{ section.settings.header_align }};
+  }
+
+  /* FAQ Item Container */
+  .faq-item-{{ section.id }} {
+    border-bottom: 1px solid {{ section.settings.border_color }};
+    margin-bottom: {{ section.settings.item_spacing }}px;
+  }
+  .faq-item-{{ section.id }}:last-child {
+    border-bottom: none;
+  }
+
+  /* Question (Summary) */
+  .faq-summary-{{ section.id }} {
+    list-style: none; /* Remove default triangle */
+    cursor: pointer;
+    padding: {{ section.settings.question_padding }}px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+  }
+  
+  .faq-summary-{{ section.id }}::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-question-text-{{ section.id }} {
+    font-family: {{ section.settings.question_font.family }}, {{ section.settings.question_font.fallback_families }} !important;
+    font-weight: {{ section.settings.question_font.weight }} !important;
+    font-style: {{ section.settings.question_font.style }} !important;
+    color: {{ section.settings.question_color }};
+    font-size: {{ section.settings.question_size_mobile }}px;
+    line-height: 1.4;
+    padding-right: 15px;
+  }
+
+  /* Active State Styling */
+  details[open] .faq-question-text-{{ section.id }} {
+    color: {{ section.settings.question_active_color }};
+  }
+
+  /* Answer (Content) */
+  .faq-answer-{{ section.id }} {
+    padding-bottom: {{ section.settings.question_padding }}px;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .faq-answer-content-{{ section.id }}, 
+  .faq-answer-content-{{ section.id }} p {
+    font-family: {{ section.settings.answer_font.family }}, {{ section.settings.answer_font.fallback_families }} !important;
+    font-weight: {{ section.settings.answer_font.weight }} !important;
+    font-style: {{ section.settings.answer_font.style }} !important;
+    color: {{ section.settings.answer_color }};
+    font-size: {{ section.settings.answer_size_mobile }}px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Icon Animation */
+  .faq-icon-{{ section.id }} {
+    width: {{ section.settings.icon_size }}px;
+    height: {{ section.settings.icon_size }}px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+    fill: {{ section.settings.icon_color }};
+  }
+
+  details[open] .faq-icon-{{ section.id }} {
+    transform: rotate(180deg);
+    fill: {{ section.settings.question_active_color }};
+  }
+  
+  /* Hide vertical line on minus if using plus/minus icon style */
+  {% if section.settings.icon_style == 'plus' %}
+    details[open] .icon-plus-vertical {
+      opacity: 0;
+    }
+  {% endif %}
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media screen and (min-width: 750px) {
+    .faq-main-heading-{{ section.id }} {
+      font-size: {{ section.settings.heading_size }}px;
+    }
+    .faq-question-text-{{ section.id }} {
+      font-size: {{ section.settings.question_size }}px;
+    }
+    .faq-answer-content-{{ section.id }}, 
+    .faq-answer-content-{{ section.id }} p {
+      font-size: {{ section.settings.answer_size }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="section-{{ section.id }}-padding">
+  <div class="faq-split-container-{{ section.id }}">
+    
+    <div class="faq-col-header-{{ section.id }}">
+      {% if section.settings.title != blank %}
+        <h2 class="faq-main-heading-{{ section.id }}">{{ section.settings.title }}</h2>
+      {% endif %}
+      
+      {% if section.settings.description != blank %}
+        <div class="faq-answer-content-{{ section.id }}">
+          {{ section.settings.description }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="faq-col-content-{{ section.id }}">
+      {% for block in section.blocks %}
+        <details class="faq-item-{{ section.id }}" {{ block.shopify_attributes }}>
+          <summary class="faq-summary-{{ section.id }}">
+            <span class="faq-question-text-{{ section.id }}">{{ block.settings.question }}</span>
+            
+            {% if section.settings.icon_style == 'chevron' %}
+              <svg class="faq-icon-{{ section.id }}" viewBox="0 0 24 24">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path>
+              </svg>
+            {% else %}
+              <svg class="faq-icon-{{ section.id }}" viewBox="0 0 24 24">
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" class="icon-plus-horizontal"></path>
+                </svg>
+            {% endif %}
+          </summary>
+          
+          <div class="faq-answer-{{ section.id }}">
+            <div class="faq-answer-content-{{ section.id }}">
+              {{ block.settings.answer }}
+            </div>
+          </div>
+        </details>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Split FAQ Section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 800,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "label": "Container Max Width",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "header_col_width",
+      "min": 20,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "label": "Header Column Width (%)",
+      "default": 35
+    },
+    {
+      "type": "range",
+      "id": "gap_desktop",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap Between Columns (Desktop)",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap Between Columns (Mobile)",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Header Column Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Sticky Header?",
+      "info": "Keeps the header visible while scrolling through questions.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading Text",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description Text (Optional)",
+      "default": "<p>Have questions? We're here to help.</p>"
+    },
+    {
+      "type": "select",
+      "id": "header_align",
+      "label": "Header Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "FAQ Styling"
+    },
+    {
+      "type": "select",
+      "id": "icon_style",
+      "label": "Toggle Icon",
+      "options": [
+        { "value": "chevron", "label": "Chevron (Arrow)" },
+        { "value": "plus", "label": "Plus / Minus" }
+      ],
+      "default": "plus"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Icon Size",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Separator Line Color",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "range",
+      "id": "question_padding",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Vertical Padding per Item",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Space Between Items",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Typography: Section Heading"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Font Family",
+      "default": "work_sans_n7"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "label": "Size (Desktop)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 18,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Size (Mobile)",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Typography: Questions"
+    },
+    {
+      "type": "font_picker",
+      "id": "question_font",
+      "label": "Font Family",
+      "default": "work_sans_n6"
+    },
+    {
+      "type": "color",
+      "id": "question_color",
+      "label": "Default Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "question_active_color",
+      "label": "Active/Open Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "question_size",
+      "min": 14,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Size (Desktop)",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "question_size_mobile",
+      "min": 14,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Size (Mobile)",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Typography: Answers"
+    },
+    {
+      "type": "font_picker",
+      "id": "answer_font",
+      "label": "Font Family",
+      "default": "work_sans_n4"
+    },
+    {
+      "type": "color",
+      "id": "answer_color",
+      "label": "Color",
+      "default": "#555555"
+    },
+    {
+      "type": "range",
+      "id": "answer_size",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Size (Desktop)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "answer_size_mobile",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Size (Mobile)",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Top (Desktop)",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Bottom (Desktop)",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "margin_horizontal",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Horizontal Margin (Desktop)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "margin_horizontal_mobile",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Horizontal Margin (Mobile)",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What is your return policy?"
+        },
+        {
+          "type": "html",
+          "id": "answer",
+          "label": "Answer (HTML allowed)",
+          "default": "<p>You can return any item within 30 days of purchase.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split FAQ Section",
+      "blocks": [
+        { "type": "faq_item" },
+        { "type": "faq_item" },
+        { "type": "faq_item" }
+      ]
+    }
+  ]
+}
+{% endschema %}

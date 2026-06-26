@@ -1,0 +1,49 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "shogun-helper": {
+      "type": "shogun-helper",
+      "settings": {}
+    },
+    "contact": {
+      "type": "contact-template",
+      "settings": {
+        "width": 1200,
+        "hide_ttl": true,
+        "breadcrumb": false,
+        "layout": "style1",
+        "map_address": "",
+        "contact_title": "Contact Us",
+        "contact_text_desc": "",
+        "show_phone": true,
+        "show_subject": false,
+        "store_opening_time": "<p><b>Opening Hours</b></p>\nMon - Fri : 9am - 5pm MST<br>",
+        "cnt_title": "Contact Us",
+        "store_address": "351 E 1750 N Vineyard UT 84059",
+        "store_phone": "866-438-3694",
+        "store_email": "support@nutricost.com",
+        "show_socials": true,
+        "socials_ttl": "Stay Connected",
+        "form_bg": "#f8f8f8",
+        "form_text": "#111111"
+      }
+    },
+    "shogun-optimizer": {
+      "type": "shogun-optimizer",
+      "settings": {}
+    }
+  },
+  "order": [
+    "shogun-helper",
+    "contact",
+    "shogun-optimizer"
+  ]
+}

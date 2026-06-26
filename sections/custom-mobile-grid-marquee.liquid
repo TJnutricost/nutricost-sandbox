@@ -1,0 +1,649 @@
+{% comment %}
+  Custom Marquee Icon Section
+  Desktop: Static Grid
+  Mobile: Smooth Infinite Scrolling Banner (Marquee)
+  Based on code structure from [cite: 1]
+{% endcomment %}
+
+{%- style -%}
+  /* 1. LOAD CUSTOM FONTS [cite: 3, 4] */
+  {{ section.settings.header_font | font_face: font_display: 'swap' }}
+  {{ section.settings.block_heading_font | font_face: font_display: 'swap' }}
+  {{ section.settings.block_body_font | font_face: font_display: 'swap' }}
+
+  /* 2. SECTION CONTAINER [cite: 5, 7] */
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    padding-left: 0; /* Full width for marquee on mobile */
+    padding-right: 0;
+    background-color: {{ section.settings.bg_color }};
+    overflow: hidden; /* Hide scrollbars */
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-left: {{ section.settings.margin_horizontal }}px;
+      padding-right: {{ section.settings.margin_horizontal }}px;
+    }
+  }
+
+  .marquee-container-{{ section.id }} {
+    max-width: {{ section.settings.max_width }}px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* 3. HEADER STYLES [cite: 9, 10] */
+  .mq-section-header-{{ section.id }} {
+    text-align: {{ section.settings.header_alignment }};
+    margin-bottom: {{ section.settings.header_margin_bottom }}px;
+    max-width: {{ section.settings.header_max_width }}px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 20px;
+  }
+
+  .mq-subheading-{{ section.id }} {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: {{ section.settings.header_color }}; /* [cite: 12] */
+    opacity: 0.8;
+  }
+
+  .mq-main-heading-{{ section.id }} {
+    font-family: {{ section.settings.header_font.family }}, {{ section.settings.header_font.fallback_families }} !important;
+    font-weight: {{ section.settings.header_font.weight }} !important; /* [cite: 13] */
+    font-style: {{ section.settings.header_font.style }} !important;
+    color: {{ section.settings.header_color }};
+    margin: 0;
+    line-height: 1.2;
+    font-size: {{ section.settings.header_size_mobile }}px; /* [cite: 14] */
+  }
+
+  @media screen and (min-width: 750px) {
+    .mq-main-heading-{{ section.id }} {
+      font-size: {{ section.settings.header_size }}px; /* [cite: 15] */
+    }
+  }
+
+  /* 4. LAYOUT LOGIC */
+  
+  /* DESKTOP: Grid Layout  */
+  @media screen and (min-width: 750px) {
+    .mq-wrapper-{{ section.id }} {
+      display: flex;
+      flex-wrap: wrap; /*  */
+      justify-content: center;
+      gap: {{ section.settings.grid_gap }}px; /* [cite: 19] */
+    }
+    
+    /* Hide the duplicate sets on desktop */
+    .mq-set-2, .mq-set-3, .mq-set-4 {
+      display: none !important;
+    }
+
+    .mq-column-{{ section.id }} {
+      flex: 1; 
+      min-width: 0;
+    }
+  }
+
+  /* MOBILE: Marquee Layout */
+  @media screen and (max-width: 749px) {
+    .mq-wrapper-{{ section.id }} {
+      display: flex;
+      width: max-content; /* Force width to fit children */
+      gap: {{ section.settings.marquee_gap }}px;
+      /* Animation */
+      animation: marquee-{{ section.settings.marquee_direction }} {{ section.settings.marquee_speed }}s linear infinite;
+    }
+
+    /* Pause on hover/touch if enabled */
+    {% if section.settings.marquee_pause %}
+      .mq-wrapper-{{ section.id }}:hover,
+      .mq-wrapper-{{ section.id }}:active,
+      .mq-wrapper-{{ section.id }}:focus {
+        animation-play-state: paused;
+      }
+    {% endif %}
+
+    .mq-column-{{ section.id }} {
+      flex-shrink: 0;
+      width: {{ section.settings.marquee_item_width }}px; /* Fixed width for smooth scroll consistency */
+    }
+  }
+
+  /* Keyframes for sliding */
+  @keyframes marquee-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* We move 50% because we duplicated content enough times */
+  }
+
+  @keyframes marquee-right {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+
+  /* 5. CONTENT STYLES */
+  .mq-column-{{ section.id }} {
+    display: flex;
+    flex-direction: column; /* [cite: 17] */
+    align-items: {{ section.settings.block_alignment }};
+    text-align: {{ section.settings.block_alignment }};
+  }
+
+  .mq-icon-wrapper-{{ section.id }} {
+    position: relative;
+    overflow: hidden; /* [cite: 21] */
+    margin-bottom: {{ section.settings.icon_margin_bottom }}px;
+    width: {{ section.settings.icon_width }}px;
+    border-radius: {{ section.settings.icon_radius }}px;
+    
+    {% if section.settings.icon_aspect_ratio != 'auto' %}
+      aspect-ratio: {{ section.settings.icon_aspect_ratio }}; /* [cite: 22] */
+    {% endif %}
+    
+    /* Alignment utilities */
+    {% if section.settings.block_alignment == 'center' %}
+      margin-left: auto;
+      margin-right: auto; /* [cite: 24] */
+    {% elsif section.settings.block_alignment == 'right' %}
+      margin-left: auto;
+      margin-right: 0;
+    {% endif %}
+  }
+
+  .mq-icon-img-{{ section.id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: {{ section.settings.icon_object_fit }}; /* [cite: 26] */
+    display: block;
+  }
+
+  .mq-block-heading-{{ section.id }} {
+    font-family: {{ section.settings.block_heading_font.family }}, {{ section.settings.block_heading_font.fallback_families }} !important;
+    font-weight: {{ section.settings.block_heading_font.weight }} !important; /* [cite: 27] */
+    font-style: {{ section.settings.block_heading_font.style }} !important;
+    color: {{ section.settings.block_heading_color }};
+    margin: 0 0 10px 0;
+    line-height: 1.3; /* [cite: 28] */
+    font-size: {{ section.settings.block_heading_size_mobile }}px;
+  }
+
+  .mq-block-body-{{ section.id }},
+  .mq-block-body-{{ section.id }} p {
+    font-family: {{ section.settings.block_body_font.family }}, {{ section.settings.block_body_font.fallback_families }} !important;
+    font-weight: {{ section.settings.block_body_font.weight }} !important; /* [cite: 29] */
+    font-style: {{ section.settings.block_body_font.style }} !important;
+    color: {{ section.settings.block_body_color }};
+    font-size: {{ section.settings.block_body_size_mobile }}px;
+    line-height: 1.5; /* [cite: 30] */
+    margin: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .mq-block-heading-{{ section.id }} {
+      font-size: {{ section.settings.block_heading_size }}px; /* [cite: 32] */
+    }
+    .mq-block-body-{{ section.id }},
+    .mq-block-body-{{ section.id }} p {
+      font-size: {{ section.settings.block_body_size }}px; /* [cite: 34] */
+    }
+  }
+{%- endstyle -%}
+
+<div class="section-{{ section.id }}-padding">
+  <div class="marquee-container-{{ section.id }}">
+    
+    {% if section.settings.title != blank or section.settings.subtitle != blank %}
+      <div class="mq-section-header-{{ section.id }}">
+        {% if section.settings.subtitle != blank %}
+          <span class="mq-subheading-{{ section.id }}">{{ section.settings.subtitle }}</span>
+        {% endif %}
+        {% if section.settings.title != blank %}
+          <h2 class="mq-main-heading-{{ section.id }}">{{ section.settings.title }}</h2>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="mq-wrapper-{{ section.id }}">
+      
+      {%- comment -%}
+        We loop 4 times to create enough sets of blocks to scroll seamlessly on mobile.
+        On Desktop, we use CSS to hide sets 2, 3, and 4 so it looks like a normal grid.
+      {%- endcomment -%}
+      
+      {% for i in (1..4) %}
+        <div class="mq-set-{{ i }}" style="display: contents;">
+          {% for block in section.blocks %}
+            <div class="mq-column-{{ section.id }}" {{ block.shopify_attributes }}>
+              
+              <div class="mq-icon-wrapper-{{ section.id }}">
+                {% if block.settings.image != blank %}
+                  {% assign icon_class = 'mq-icon-img-' | append: section.id %}
+                  {{ block.settings.image | image_url: width: 600 | image_tag: 
+                    loading: 'lazy', 
+                    class: icon_class,
+                    widths: '100, 200, 300, 400',
+                    sizes: '(min-width: 750px) 20vw, 50vw'
+                  }}
+                {% else %}
+                   {% assign placeholder_class = 'mq-icon-img-' | append: section.id %}
+                   {{ 'image' | placeholder_svg_tag: placeholder_class }} /* [cite: 41] */
+                {% endif %}
+              </div>
+
+              {% if block.settings.heading != blank %}
+                <h3 class="mq-block-heading-{{ section.id }}">{{ block.settings.heading }}</h3>
+              {% endif %}
+              
+              {% if block.settings.text != blank %}
+                <div class="mq-block-body-{{ section.id }}">
+                  {{ block.settings.text }}
+                </div>
+              {% endif %}
+
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Marquee / Grid Section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Layout "
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 800,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Section Max Width",
+      "default": 1200
+    },
+    {
+      "type": "header",
+      "content": "Desktop Grid Settings"
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Column Gap (Desktop)",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Mobile Marquee Settings"
+    },
+    {
+      "type": "select",
+      "id": "marquee_direction",
+      "label": "Scroll Direction",
+      "options": [
+        { "value": "left", "label": "Scroll Left" },
+        { "value": "right", "label": "Scroll Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "marquee_speed",
+      "min": 5,
+      "max": 60,
+      "step": 1,
+      "unit": "s",
+      "label": "Scroll Speed (Seconds)",
+      "info": "Lower is faster.",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "marquee_gap",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap Between Items (Mobile)",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "marquee_item_width",
+      "min": 100,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "label": "Item Width (Mobile)",
+      "info": "Fixed width is required for smooth animation.",
+      "default": 250
+    },
+    {
+      "type": "checkbox",
+      "id": "marquee_pause",
+      "label": "Pause on Touch/Hover",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Header Settings"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "SOCIAL PROOF"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Main Heading",
+      "default": "OUR PARTNERS"
+    },
+    {
+      "type": "select",
+      "id": "header_alignment",
+      "label": "Header Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" } /* [cite: 47] */
+      ],
+      "default": "center"
+    },
+    {
+      "type": "font_picker",
+      "id": "header_font",
+      "label": "Header Font",
+      "default": "work_sans_n7" /* [cite: 48] */
+    },
+    {
+      "type": "color",
+      "id": "header_color",
+      "label": "Header Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "header_size",
+      "min": 16,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "label": "Header Size (Desktop)", /* [cite: 49] */
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "header_size_mobile",
+      "min": 16,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Header Size (Mobile)", /* [cite: 50] */
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "header_margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Header Bottom Margin",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Icon/Content Settings"
+    },
+    {
+      "type": "range",
+      "id": "icon_width",
+      "min": 40,
+      "max": 400,
+      "step": 5,
+      "unit": "px",
+      "label": "Icon Width", /* [cite: 51] */
+      "default": 120
+    },
+    {
+      "type": "select",
+      "id": "icon_aspect_ratio",
+      "label": "Icon Aspect Ratio",
+      "options": [
+        { "value": "auto", "label": "Original" },
+        { "value": "1/1", "label": "Square (1:1)" },
+        { "value": "4/3", "label": "Landscape (4:3)" },
+        { "value": "2/3", "label": "Portrait (2:3)" }
+      ],
+      "default": "1/1"
+    },
+    {
+      "type": "range",
+      "id": "icon_radius",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Icon Border Radius", /* [cite: 53] */
+      "default": 200
+    },
+    {
+      "type": "select",
+      "id": "icon_object_fit",
+      "label": "Icon Object Fit",
+      "options": [
+        { "value": "cover", "label": "Cover" },
+        { "value": "contain", "label": "Contain" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "range",
+      "id": "icon_margin_bottom",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Icon Bottom Margin",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "block_alignment",
+      "label": "Content Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Block Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "block_heading_font",
+      "label": "Heading Font",
+      "default": "work_sans_n6"
+    },
+    {
+      "type": "color",
+      "id": "block_heading_color",
+      "label": "Heading Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "block_heading_size",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading Size (Desktop)", /* [cite: 57] */
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "block_heading_size_mobile",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading Size (Mobile)", /* [cite: 58] */
+      "default": 18
+    },
+    {
+      "type": "font_picker",
+      "id": "block_body_font",
+      "label": "Body Font",
+      "default": "work_sans_n4"
+    },
+    {
+      "type": "color",
+      "id": "block_body_color",
+      "label": "Body Color", /* [cite: 59] */
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "block_body_size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Body Size (Desktop)",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "block_body_size_mobile",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Body Size (Mobile)", /* [cite: 60] */
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Top (Desktop)", /* [cite: 61] */
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Bottom (Desktop)", /* [cite: 62] */
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)", /* [cite: 63] */
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "margin_horizontal",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Horizontal Margin (Desktop)", /* [cite: 64] */
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Icon Column", /* [cite: 65] */
+      "limit": 10,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Icon Image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading", /* [cite: 66] */
+          "default": "HEADING"
+        },
+        {
+          "type": "html",
+          "id": "text",
+          "label": "Text (HTML)",
+          "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee / Grid Section",
+      "blocks": [
+        { "type": "column" },
+        { "type": "column" },
+        { "type": "column" },
+        { "type": "column" }
+      ]
+    }
+  ]
+}
+{% endschema %}

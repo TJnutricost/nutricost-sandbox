@@ -1,0 +1,445 @@
+{% doc %}
+  @prompt
+    I need a section with a small scrolling text banner.  Give me all typography options, scroll direction options, background color options, spacing and sizing, as well as potentially adding small images/logos with image dimension settings
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-scroll-banner-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.padding_top }}px 0 {{ block.settings.padding_bottom }}px;
+    position: relative;
+  }
+
+  .ai-scroll-banner-track-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.item_spacing }}px;
+    width: fit-content;
+    animation: ai-scroll-{{ ai_gen_id }}-{{ block.settings.scroll_direction }} {{ block.settings.scroll_speed }}s linear infinite;
+  }
+
+  .ai-scroll-banner-{{ ai_gen_id }}:hover .ai-scroll-banner-track-{{ ai_gen_id }} {
+    {% if block.settings.pause_on_hover %}
+      animation-play-state: paused;
+    {% endif %}
+  }
+
+  .ai-scroll-banner-item-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.text_image_gap }}px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .ai-scroll-banner-image-{{ ai_gen_id }} {
+    width: {{ block.settings.image_width }}px;
+    height: {{ block.settings.image_height }}px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .ai-scroll-banner-text-{{ ai_gen_id }} {
+    font-family: {{ block.settings.font_family.family }}, {{ block.settings.font_family.fallback_families }};
+    font-weight: {{ block.settings.font_family.weight }};
+    font-style: {{ block.settings.font_family.style }};
+    font-size: {{ block.settings.font_size }}px;
+    color: {{ block.settings.text_color }};
+    text-transform: {{ block.settings.text_transform }};
+    letter-spacing: {{ block.settings.letter_spacing }}px;
+    line-height: 1.2;
+  }
+
+  @keyframes ai-scroll-{{ ai_gen_id }}-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes ai-scroll-{{ ai_gen_id }}-right {
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-scroll-banner-text-{{ ai_gen_id }} {
+      font-size: {{ block.settings.font_size_mobile }}px;
+    }
+
+    .ai-scroll-banner-image-{{ ai_gen_id }} {
+      width: {{ block.settings.image_width_mobile }}px;
+      height: {{ block.settings.image_height_mobile }}px;
+    }
+  }
+{% endstyle %}
+
+<scroll-banner-{{ ai_gen_id }} class="ai-scroll-banner-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-scroll-banner-track-{{ ai_gen_id }}">
+    {% for i in (1..block.settings.repeat_count) %}
+      <div class="ai-scroll-banner-item-{{ ai_gen_id }}">
+        {% if block.settings.show_image_before and block.settings.image %}
+          <img
+            src="{{ block.settings.image | image_url: width: 200 }}"
+            alt="{{ block.settings.image.alt | escape }}"
+            class="ai-scroll-banner-image-{{ ai_gen_id }}"
+            loading="lazy"
+            width="{{ block.settings.image_width }}"
+            height="{{ block.settings.image_height }}"
+          >
+        {% endif %}
+
+        {% if block.settings.text != blank %}
+          <span class="ai-scroll-banner-text-{{ ai_gen_id }}">
+            {{ block.settings.text }}
+          </span>
+        {% endif %}
+
+        {% if block.settings.show_image_after and block.settings.image %}
+          <img
+            src="{{ block.settings.image | image_url: width: 200 }}"
+            alt="{{ block.settings.image.alt | escape }}"
+            class="ai-scroll-banner-image-{{ ai_gen_id }}"
+            loading="lazy"
+            width="{{ block.settings.image_width }}"
+            height="{{ block.settings.image_height }}"
+          >
+        {% endif %}
+      </div>
+
+      {% if block.settings.separator != blank %}
+        <div class="ai-scroll-banner-item-{{ ai_gen_id }}">
+          <span class="ai-scroll-banner-text-{{ ai_gen_id }}">
+            {{ block.settings.separator }}
+          </span>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    {% for i in (1..block.settings.repeat_count) %}
+      <div class="ai-scroll-banner-item-{{ ai_gen_id }}">
+        {% if block.settings.show_image_before and block.settings.image %}
+          <img
+            src="{{ block.settings.image | image_url: width: 200 }}"
+            alt="{{ block.settings.image.alt | escape }}"
+            class="ai-scroll-banner-image-{{ ai_gen_id }}"
+            loading="lazy"
+            width="{{ block.settings.image_width }}"
+            height="{{ block.settings.image_height }}"
+          >
+        {% endif %}
+
+        {% if block.settings.text != blank %}
+          <span class="ai-scroll-banner-text-{{ ai_gen_id }}">
+            {{ block.settings.text }}
+          </span>
+        {% endif %}
+
+        {% if block.settings.show_image_after and block.settings.image %}
+          <img
+            src="{{ block.settings.image | image_url: width: 200 }}"
+            alt="{{ block.settings.image.alt | escape }}"
+            class="ai-scroll-banner-image-{{ ai_gen_id }}"
+            loading="lazy"
+            width="{{ block.settings.image_width }}"
+            height="{{ block.settings.image_height }}"
+          >
+        {% endif %}
+      </div>
+
+      {% if block.settings.separator != blank %}
+        <div class="ai-scroll-banner-item-{{ ai_gen_id }}">
+          <span class="ai-scroll-banner-text-{{ ai_gen_id }}">
+            {{ block.settings.separator }}
+          </span>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</scroll-banner-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class ScrollBanner{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.track = this.querySelector('.ai-scroll-banner-track-{{ ai_gen_id }}');
+      }
+    }
+
+    customElements.define('scroll-banner-{{ ai_gen_id }}', ScrollBanner{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Scrolling text banner",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Free shipping on orders over $50"
+    },
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "Separator",
+      "default": "•"
+    },
+    {
+      "type": "range",
+      "id": "repeat_count",
+      "label": "Repeat count",
+      "min": 5,
+      "max": 20,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_family",
+      "label": "Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "font_size_mobile",
+      "label": "Font size mobile",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "Text transform",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        },
+        {
+          "value": "lowercase",
+          "label": "Lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing",
+      "label": "Letter spacing",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Image or logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image_before",
+      "label": "Show image before text",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image_after",
+      "label": "Show image after text",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "label": "Image width",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "image_height",
+      "label": "Image height",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "image_width_mobile",
+      "label": "Image width mobile",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "image_height_mobile",
+      "label": "Image height mobile",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "text_image_gap",
+      "label": "Gap between text and image",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Scroll behavior"
+    },
+    {
+      "type": "select",
+      "id": "scroll_direction",
+      "label": "Scroll direction",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "label": "Scroll speed",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "s",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "label": "Space between items",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scrolling text banner"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,154 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "shogun-helper": {
+      "type": "shogun-helper",
+      "settings": {}
+    },
+    "shogun-above": {
+      "type": "shogun-above",
+      "custom_css": [],
+      "settings": {}
+    },
+    "product": {
+      "type": "product-template",
+      "blocks": {
+        "recharge_subscriptions_subscription_widget_v2_fFwTcP": {
+          "type": "shopify://apps/recharge-subscriptions/blocks/subscription-widget-v2/371eed76-0b44-4869-9813-730372ea378e",
+          "settings": {}
+        },
+        "b09310d8-6243-41a4-8688-c32e3ef763c0": {
+          "type": "descriptions",
+          "settings": {
+            "title": "PRODUCT DETAILS"
+          }
+        },
+        "e93fe9d7-86fe-4f4c-8a25-586b3b13ddba": {
+          "type": "review",
+          "settings": {
+            "title": "REVIEWS"
+          }
+        },
+        "a5ae98c9-5d60-4cc9-a24c-22a0249c1389": {
+          "type": "sizechart",
+          "disabled": true,
+          "settings": {
+            "title": "SIZE & FIT"
+          }
+        },
+        "01d734ae-d721-4a1e-81c1-f2de210416f8": {
+          "type": "custom",
+          "settings": {
+            "title": "SHIPPING & RETURNS",
+            "content": "<h3>NUTRICOST’S 60-DAY MONEY BACK GUARANTEE</h3>\n<p>In the unlikely event that you’re not completely satisfied with ANY Nutricost™ product, we don’t want to keep your money. Even though our products are of the utmost quality, no supplement works for everyone. Contact us and we’ll refund 100% of your purchase price (minus S&H).</p>\n\n<p>Have questions about our products? Want to leave a comment about our service? Simply fill out the form below and one of our customer service representatives will contact you shortly.</p>\n\n\n<p>If you wish to speak with a representative of the Company feel free to call (866-438-3694) or send us an email at support@nutricost.com with any and all questions or concerns related to our products and services</p>\n\n<h3>SHIPPING TIME:</h3>\n<p>Our goal is to have your order processed within 1-2 business days depending on production of items ordered, size of order, and availability. Once Shipped, usually takes 3-5 business days for shipment to be received. (International orders may take longer due to customs).\nWe try to get your order shipped as fast as possible while still upholding to our standard of quality.</p>\n<p>Due to certain circumstances out of our control shipping times may vary.</p>"
+          }
+        },
+        "851c8293-421a-46c2-aabb-4cfbda159662": {
+          "type": "custom",
+          "disabled": true,
+          "settings": {
+            "title": "CUSTOM TABS",
+            "content": ""
+          }
+        }
+      },
+      "block_order": [
+        "recharge_subscriptions_subscription_widget_v2_fFwTcP",
+        "b09310d8-6243-41a4-8688-c32e3ef763c0",
+        "e93fe9d7-86fe-4f4c-8a25-586b3b13ddba",
+        "a5ae98c9-5d60-4cc9-a24c-22a0249c1389",
+        "01d734ae-d721-4a1e-81c1-f2de210416f8",
+        "851c8293-421a-46c2-aabb-4cfbda159662"
+      ],
+      "custom_css": [
+        "p,li {font-family: \"Gilroy Regular\" !important;}",
+        ".recharge-inner-most-price {font-family: \"Gilroy Extra Bold\" !important;}",
+        ".swatch-element .swatchInput:checked + .swatchLbl {border: none !important; background-color: #005eb8; color: #ffffff; box-shadow: none;}"
+      ],
+      "settings": {
+        "show_product_tabs": true
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "show_related_products": true,
+        "title": "Related Products",
+        "subtitle": "",
+        "type": "1",
+        "grid": 4,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "related_total_product_to_show": "8",
+        "related_products_autoplay": false,
+        "autoplay_speed": "3000"
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "show_product_recommendations": true,
+        "recommanded_products_autoplay": false,
+        "autoplay_speed": "3000",
+        "title": "Recommended Products",
+        "subtitle": "",
+        "grid": 4,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "recommanded_total_product_to_show": "4"
+      }
+    },
+    "recently-viewed": {
+      "type": "recently-viewed",
+      "settings": {
+        "show_recently_products": true,
+        "recently_autoplay": false,
+        "autoplay_speed": "3000",
+        "title": "Recently Viewed Products",
+        "subtitle": "",
+        "grid": 4,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "recently_pr_limit": "4"
+      }
+    },
+    "custom_liquid_GRkFyc": {
+      "type": "custom-liquid",
+      "settings": {
+        "title": "",
+        "subtitle": "",
+        "custom_liquid": "<script>\n  window.addEventListener('load', function() {\n  var _learnq = window._learnq || [];\n  function addedToCart() {\n   fetch(`${window.location.origin}/cart.js`)\n   .then(res => res.clone().json().then(data => {\n    var cart = {\n      total_price: data.total_price/100,\n      $value: data.total_price/100,\n      total_discount: data.total_discount,\n      original_total_price: data.original_total_price/100,\n      items: data.items\n    }\n    if (item !== 'undefined') {\n      cart = Object.assign(cart, item)\n    }\n    if (klAjax) {\n       _learnq.push(['track', 'Added to Cart', cart]);\n       klAjax = false;\n      }\n   }))\n  };\n  (function (ns, fetch) {\n    ns.fetch = function() {\n      const response = fetch.apply(this, arguments);\n      response.then(res => {\n        if (`${window.location.origin}/cart/add.js`\n          .includes(res.url) && res.url !== '') {\n              addedToCart()\n        }\n      });\n      return response\n     }\n  }(window, window.fetch));\n  var klAjax = true;\n  var atcButtons = document.querySelectorAll(\"form[action*='/cart/add'] button[type='submit']\");\n  for (var i = 0; i < atcButtons.length; i++) { \n    atcButtons[i].addEventListener(\"click\", function() {\n      if (klAjax) {\n        _learnq.push(['track', 'Added to Cart', item]);\n        klAjax = false;\n      }\n    })\n  }\n  });\n</script>",
+        "top-offeset": "none",
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa"
+      }
+    },
+    "shogun-below": {
+      "type": "shogun-below",
+      "settings": {}
+    },
+    "shogun-optimizer": {
+      "type": "shogun-optimizer",
+      "settings": {}
+    }
+  },
+  "order": [
+    "shogun-helper",
+    "shogun-above",
+    "product",
+    "related-products",
+    "recommendations",
+    "recently-viewed",
+    "custom_liquid_GRkFyc",
+    "shogun-below",
+    "shogun-optimizer"
+  ]
+}

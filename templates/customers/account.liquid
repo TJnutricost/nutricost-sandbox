@@ -1,0 +1,253 @@
+<!-- breadcrumb -->
+{% include 'breadcrumb' %}
+
+<style>
+  p {font-family: "Poppins" !important; color: #777777; margin-bottom: 30px;}
+  .account-layout { margin-top: 50px; }
+  .account-sidebar { padding-right: 20px; }
+  .account-nav { display:flex; flex-direction:column; gap:15px; align-items:flex-start; }
+  .account-nav__item{
+    border:0;
+    color:#8F8F8F;
+    background: transparent;
+    padding:8px 16px;
+    border-radius:999px;
+    font-weight:600;
+    cursor:pointer;
+    line-height:1;
+    transition: background-color .18s ease, color .18s ease, transform .12s ease;
+  }
+  .account-nav__item:hover{
+    transform: translateY(-1px);
+  }
+  .account-nav__item:active{
+    transform: translateY(0px) scale(0.98);
+  }
+  .account-nav__item.is-active{
+    background:#d9e5ff;
+    color:#0154a6;
+  }
+  .account-panel{ display:none; }
+  .account-panel.is-active{ display:block;}
+  .lion-claimed-rewards-list--no-items{color: #777777;}
+
+/* Nutriclub layout */
+.nutriclub-cards{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:24px;
+  max-width:700px;
+}
+
+.nutriclub-card{
+  background:#fff;
+  border-radius:14px;
+  padding:22px 26px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.08);
+}
+
+.nutriclub-cards .nutriclub-card:first-child{
+  position: relative;
+  background-image: url("https://cdn.shopify.com/s/files/1/0222/4128/0074/files/Mask_group.png?v=1770746292");
+  background-repeat: no-repeat;
+  background-position: center right;
+  background-size: cover;
+  overflow: hidden;
+}
+
+.nutriclub-card__title{
+  font-size:16px;
+  color:#000;
+  
+}
+
+.nutriclub-card__text{
+  font-size:18px;
+  font-weight:700;
+  line-height:1.3;
+}
+
+/* Points styling */
+.nutriclub-points{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:28px;
+  font-weight:800;
+  color:#111;
+  margin-top: 10px;
+}
+
+.nutriclub-points__icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#0154a6;
+  color:#fff;
+  font-size:18px;
+}
+
+/* 모바일 */
+@media (max-width: 767px){
+  .nutriclub-cards{
+    grid-template-columns:1fr;
+  }
+}
+
+  @media (max-width: 767.98px){
+    hr {margin: 25px 0 10px 0;}
+    .account-layout { margin-top: 10px; }
+    .account-nav {display: flex; gap: 10px; flex-direction: row; align-items: center; }
+    .account-nav__item {font-size: 12px; justify-content: center;}
+    .account-panel.is-active {margin: 0 2%;}
+  }
+</style>
+
+<div class="page-width">
+  <h1 class="page-title">{{ 'customer.account.title' | t }}</h1>
+  <hr/>
+
+  <div class="grid account-layout">
+    <!-- LEFT MENU -->
+    <div class="grid__item medium-up--one-third account-sidebar" style="margin-bottom: 30px;">
+      <div class="account-nav" role="tablist" aria-label="Account menu">
+        <button type="button" class="account-nav__item is-active" data-target="panel-orders" role="tab" aria-selected="true">
+          Order History
+        </button>
+        <button type="button" class="account-nav__item" data-target="panel-rewards" role="tab" aria-selected="false">
+          Nutriclub Rewards
+        </button>
+        <button type="button" class="account-nav__item" data-target="panel-details" role="tab" aria-selected="false">
+          Account Details
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT CONTENT -->
+    <div class="grid__item medium-up--two-thirds" style="margin-bottom: 30px;">
+
+      <!-- PANEL 1: Order History (기존 내용 그대로) -->
+      <div id="panel-orders" class="account-panel is-active" role="tabpanel">
+        <h4>{{ 'customer.orders.title' | t }}</h4>
+
+        {% paginate customer.orders by 20 %}
+          {% if customer.orders.size != 0 %}
+
+            <table class="responsive-table">
+              <thead>
+                <tr>
+                  <th>{{ 'customer.orders.order_number' | t }}</th>
+                  <th>{{ 'customer.orders.date' | t }}</th>
+                  <th>{{ 'customer.orders.payment_status' | t }}</th>
+                  <th>{{ 'customer.orders.fulfillment_status' | t }}</th>
+                  <th>{{ 'customer.orders.total' | t }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in customer.orders %}
+                  <tr>
+                    <td data-label="{{ 'customer.orders.order_number' | t }}">
+                      <a href="{{ order.customer_url }}" class="btn btn--secondary btn--small">{{ order.name }}</a>
+                    </td>
+                    <td data-label="{{ 'customer.orders.date' | t }}">{{ order.created_at | time_tag: format: 'date' }}</td>
+                    <td data-label="{{ 'customer.orders.payment_status' | t }}">{{ order.financial_status_label }}</td>
+                    <td data-label="{{ 'customer.orders.fulfillment_status' | t }}">{{ order.fulfillment_status_label }}</td>
+                    <td data-label="{{ 'customer.orders.total' | t }}">{{ order.total_price | money }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+          {% else %}
+
+            <p>{{ 'customer.orders.none' | t }}</p>
+
+          {% endif %}
+          {% if paginate.pages > 1 %}
+            {% include 'pagination' %}
+          {% endif %}
+        {% endpaginate %}
+
+        <!-- Begin Recharge code -->
+        <p><a href="/tools/recurring/login/" style='padding: 4px 10px; background-color: #0154a6; color: white; font-weight: bold; border-radius: 30px'>Manage Subscriptions</a></p>
+        <!-- End Recharge code -->
+      </div>
+
+      <!-- PANEL 2: Rewards / Nutriclub -->
+      <div id="panel-rewards" class="account-panel" role="tabpanel">
+        <h4 style="margin-bottom:20px;">Nutriclub Rewards</h4>
+
+        <div class="nutriclub-cards">
+          <!-- Welcome Card -->
+          <div class="nutriclub-card">
+            <span>Welcome to <br/> Your Nutriclub <br/> Profile!</span>
+          </div>
+
+          <!-- Points Card -->
+          <div class="nutriclub-card nutriclub-card--points">
+            <span class="nutriclub-card__title">Available Points</span>
+            <p class="nutriclub-points">
+              <span class="nutriclub-points__icon">★</span>
+              <span data-lion-points="approved"></span>
+            </p>
+          </div>
+        </div>
+
+        <div style="margin: 50px 0 30px 0;">
+          <h4>Your Rewards</h4>
+          <div data-lion-claimed-rewards-list></div>
+        </div>
+
+        <p>
+          <a href="/pages/rewards"
+            style="padding: 6px 14px; background-color:#0154a6; color:white; font-weight:bold; border-radius:30px;">
+            Visit Nutriclub
+          </a>
+        </p>
+      </div>
+
+      <!-- PANEL 3: Account Details -->
+      <div id="panel-details" class="account-panel" role="tabpanel">
+        <div>
+          <h4>{{ 'customer.account.details' | t }}</h4>
+          {{ customer.default_address | format_address }}
+          <p><a href="{{ routes.account_addresses_url }}" class="btn btn--small">{{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})</a></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var buttons = document.querySelectorAll('.account-nav__item');
+    var panels  = document.querySelectorAll('.account-panel');
+
+    function activate(targetId, pushHash) {
+      buttons.forEach(function (b) {
+        var isActive = b.getAttribute('data-target') === targetId;
+        b.classList.toggle('is-active', isActive);
+        b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      panels.forEach(function (p) {
+        p.classList.toggle('is-active', p.id === targetId);
+      });
+      if (pushHash) {
+        try { history.replaceState(null, '', '#' + targetId); } catch (e) {}
+      }
+    }
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        activate(btn.getAttribute('data-target'), true);
+      });
+    });
+
+    var initial = (location.hash || '').replace('#','');
+    if (initial && document.getElementById(initial)) activate(initial, false);
+  })();
+</script>

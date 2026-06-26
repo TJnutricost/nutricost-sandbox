@@ -1,0 +1,184 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page": {
+      "type": "page-template",
+      "settings": {
+        "section_width": false,
+        "hide_hdft": false,
+        "breadcrumb": false,
+        "bnr": true,
+        "show_collection_name": true,
+        "bheight": 300,
+        "bheightipad": 200,
+        "bheightmob": 100,
+        "bnr-wd": 600,
+        "ftTtl": 42,
+        "ttlft": "font2",
+        "ttlwt": "fw-700",
+        "ttlcase": "tt-u",
+        "ftTxt": 15,
+        "ttlclr": "#000",
+        "clr_bg": "#f5f5f5",
+        "width": 1200,
+        "hide_ttl": false
+      }
+    },
+    "1634461837e147a733": {
+      "type": "photo-gallery",
+      "blocks": {
+        "1556020238652": {
+          "type": "lookbook1",
+          "settings": {
+            "image": "shopify://shop_images/1_dbda98bd-576d-4147-8929-98a1d295c4db.jpg",
+            "url": "shopify://collections/accesories",
+            "title": "<b>WOMEN COLLECTION</b>",
+            "title2": "A girl should be two things: classy and fabulous",
+            "width": "50%"
+          }
+        },
+        "1556020206822": {
+          "type": "lookbook1",
+          "settings": {
+            "image": "shopify://shop_images/2_e1cbf9e9-4921-43e2-b3b5-d88e8cafe354.jpg",
+            "url": "shopify://collections/accesories",
+            "title": "<b>FASHION IT</b>",
+            "title2": "Girls You May Not Know About but Should",
+            "width": "50%"
+          }
+        },
+        "1556080853264": {
+          "type": "lookbook1",
+          "settings": {
+            "image": "shopify://shop_images/4_4a96e254-b439-4ab2-92e8-0207612a2c17.jpg",
+            "url": "",
+            "title": "<b>Most Popular on AVON</b>",
+            "title2": "",
+            "width": "50%"
+          }
+        },
+        "1559973313518": {
+          "type": "lookbook1",
+          "settings": {
+            "image": "shopify://shop_images/12_9b24afa0-807a-4f16-b705-93089b386ddf.jpg",
+            "url": "",
+            "title": "",
+            "title2": "<b>WHITE HEAT </b>",
+            "width": "50%"
+          }
+        },
+        "1559981974663": {
+          "type": "lookbook1",
+          "settings": {
+            "image": "shopify://shop_images/10.jpg",
+            "url": "",
+            "title": "",
+            "title2": "",
+            "width": "50%"
+          }
+        },
+        "1556020391737": {
+          "type": "lookbook1",
+          "settings": {
+            "image": "shopify://shop_images/3_ea402b5a-bb79-43e6-8349-3eb831e519f7.jpg",
+            "url": "",
+            "title": "",
+            "title2": "What you wear is how you present yourself to the world",
+            "width": "50%"
+          }
+        },
+        "1559815614407": {
+          "type": "lookbook1",
+          "settings": {
+            "image": "shopify://shop_images/5_3600fc4a-acb5-4946-ae8c-d986623413dd.jpg",
+            "url": "",
+            "title": "SUPPERS TOPS",
+            "title2": "Jacket Retired",
+            "width": "50%"
+          }
+        },
+        "1559980055256": {
+          "type": "lookbook1",
+          "settings": {
+            "image": "shopify://shop_images/9.jpg",
+            "url": "",
+            "title": "",
+            "title2": "<b>SHOP SHORTS</b>",
+            "width": "50%"
+          }
+        },
+        "1559814826450": {
+          "type": "lookbook1",
+          "settings": {
+            "image": "shopify://shop_images/14_7a9f6610-bfdb-44f0-ab8b-20c5a3bf0382.jpg",
+            "url": "",
+            "title": "Fast fashion",
+            "title2": "Clothing is designed to fall apart",
+            "width": "50%"
+          }
+        },
+        "1559974370545": {
+          "type": "lookbook1",
+          "settings": {
+            "image": "shopify://shop_images/7.jpg",
+            "url": "",
+            "title": "",
+            "title2": "",
+            "width": "50%"
+          }
+        },
+        "1559974380773": {
+          "type": "lookbook1",
+          "settings": {
+            "image": "shopify://shop_images/13.jpg",
+            "url": "",
+            "title": "",
+            "title2": "",
+            "width": "50%"
+          }
+        }
+      },
+      "block_order": [
+        "1556020238652",
+        "1556020206822",
+        "1556080853264",
+        "1559973313518",
+        "1559981974663",
+        "1556020391737",
+        "1559815614407",
+        "1559980055256",
+        "1559814826450",
+        "1559974370545",
+        "1559974380773"
+      ],
+      "settings": {
+        "title": "",
+        "subtitle": "",
+        "top-offeset": "none",
+        "fullwidth": false,
+        "pad-desk": 55,
+        "pad-ipad": 15,
+        "pad-mbl": 10,
+        "grid-spacing": 10,
+        "grid-spacing-mbl": 5,
+        "grid-spacing-col": 4,
+        "cap_bg": "#ffffff",
+        "cap_text": "#000000",
+        "zoom_bg": "#111111",
+        "zoom_text": "#ffffff"
+      }
+    }
+  },
+  "order": [
+    "page",
+    "1634461837e147a733"
+  ]
+}

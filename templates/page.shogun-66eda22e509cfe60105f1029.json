@@ -1,0 +1,52 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "product_slider_6196a09d-0ae0-42d1-8dea-af131f5912dd": {
+      "type": "product-slider",
+      "custom_css": [],
+      "settings": {
+        "title": "Our Collection",
+        "subtitle": "Describe your products, collection etc...",
+        "collection": "best-sellers",
+        "secondary_image": true,
+        "show_vendor": false,
+        "prlist_btn_show": false,
+        "btn_mobiles": false,
+        "show_view_all": "",
+        "show_color_swatch": true,
+        "color_type": "color",
+        "vr_bg_position": "50% 0",
+        "color_size": "small",
+        "color_style": "rounded",
+        "top-offeset": "default",
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa",
+        "prbox_style": "style1",
+        "grid": 4,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "rows": "5",
+        "autoplay": false,
+        "autoplay_speed": 5
+      }
+    },
+    "shogun-custom-html_acc3012d-31d9-4ab8-afdd-7135893a3048": {
+      "type": "shogun-custom-html",
+      "settings": {
+        "html": "<style></style>\n<div id=\"s-acc3012d-31d9-4ab8-afdd-7135893a3048\"  class=\"shg-c  shg-align-left\">\n  <div class=\"klaviyo-form-UHQbLb\"></div>\n\n</div>\n"
+      }
+    }
+  },
+  "order": [
+    "product_slider_6196a09d-0ae0-42d1-8dea-af131f5912dd",
+    "shogun-custom-html_acc3012d-31d9-4ab8-afdd-7135893a3048"
+  ]
+}
