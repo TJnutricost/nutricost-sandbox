@@ -1,8 +1,10 @@
+[environments.default]
+store = "nutricost-shop.myshopify.com"
+
 [environments.dev]
 store = "nutricost.myshopify.com"
-
-[environments.staging]
-store = "nutricost.myshopify.com"
-theme = "123456789012"
+theme = "156821815526"
 
 [environments.production]
+store = "nutricost-shop.myshopify.com"
+theme = "LIVE_THEME_ID"
