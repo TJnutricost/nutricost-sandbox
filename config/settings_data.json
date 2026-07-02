@@ -198,9 +198,9 @@
     "color_borders": "#eeeeee",
     "tooltip_bg": "#000000",
     "tooltip_text": "#ffffff",
-    "announcement": false,
+    "announcement": true,
     "announcement_mb": false,
-    "announcement_txt": "<a href=\"https://nutricost.com/pages/nutricost-new-year-sale\" style=\"color: #fff;\">\n<strong>New Year. No Excuses. Use WIN2026 for 30% off sitewide</strong>\n<span style=\"font-size:10px;\"> *Not combinable with subscriptions, bundles, other discounts, or free shipping. </span>\n</a>",
+    "announcement_txt": "<div id=\"promo-main-message\">\n  <a href=\"https://nutricost.com/pages/nutricost-new-year-sale\" style=\"color:#fff;\">\n    <strong>New Year. No Excuses. Use WIN2026 for 30% off sitewide</strong>\n    <span style=\"font-size:10px;\"> *Not combinable with subscriptions, bundles, other discounts, or free shipping.</span>\n  </a>\n</div>\n\n<div id=\"promo-scheduled-message\">\n  <a href=\"https://nutricost.com/pages/nutricost-new-year-sale\" style=\"color:#fff;\">\n    <strong>TEST</strong>\n    <span style=\"font-size:10px;\"> *this is a test.</span>\n  </a>\n</div>",
     "announcement_link": "https://nutricost.com/pages/nutricost-pets-product-sale",
     "annouance_bg": "#45baf6",
     "promotion_bg": "",
@@ -869,11 +869,6 @@
       },
       "2200952712151285029": {
         "type": "shopify://apps/microsoft-clarity/blocks/brandAgents_js/31c3d126-8116-4b4a-8ba1-baeda7c4aeea",
-        "disabled": false,
-        "settings": {}
-      },
-      "12429728106950981667": {
-        "type": "shopify://apps/blocky-fraud-blocker/blocks/app-embed/aa25b3bf-c2c5-4359-aa61-7836c225c5a9",
         "disabled": false,
         "settings": {}
       },

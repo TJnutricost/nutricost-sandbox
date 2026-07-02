@@ -1,4 +1,4 @@
-{% include 'shogun-content-handler' %}
+]{% include 'shogun-content-handler' %}
 {% comment %} GitHub connection test {% endcomment %}
 <!doctype html>
 <html
@@ -395,5 +395,6 @@ dataLayer.push({
     {% unless request.page_type == 'page' and template.suffix == 'loyaltylion' %}
       {% render 'optimizer' %}
     {% endunless %}
+    {% section 'scheduled-element-switcher' %}
   </body>
 </html>

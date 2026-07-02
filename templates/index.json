@@ -16,10 +16,25 @@
     "177022669809166ab0": {
       "type": "_blocks",
       "settings": {}
+    },
+    "scheduled_theme_switcher_34prBE": {
+      "type": "scheduled-theme-switcher",
+      "name": "Scheduled switcher",
+      "settings": {
+        "enable_scheduler": true,
+        "default_selector": "",
+        "scheduled_selector": "",
+        "start_time": "2026-07-03T00:00:00-06:00",
+        "end_time": "2026-07-06T00:00:00-06:00",
+        "hide_default_during_window": true,
+        "hide_scheduled_outside_window": true,
+        "debug_mode": false
+      }
     }
   },
   "order": [
     "shogun-home",
-    "177022669809166ab0"
+    "177022669809166ab0",
+    "scheduled_theme_switcher_34prBE"
   ]
 }
