@@ -788,8 +788,8 @@
           "enable_scheduler": true,
           "default_selector": "#promo-main-message",
           "scheduled_selector": "#promo-scheduled-message",
-          "start_time": "2026-07-02T16:58:30-06:00",
-          "end_time": "2026-07-02T16:58:40-06:00",
+          "start_time": "2026-07-02T16:59:00-06:00",
+          "end_time": "2026-07-02T16:59:10-06:00",
           "hide_default_during_window": true,
           "hide_scheduled_outside_window": true,
           "debug_mode": false
